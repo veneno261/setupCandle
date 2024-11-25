@@ -22,15 +22,15 @@ RUN dart pub get --offline
 # Compile the CLI application to a native executable (optional)
 RUN dart compile exe bin/candle_setup_finder.dart -o /app/bin/candle_setup_finder
 
-FROM scratch
-COPY --from=build /runtime/ /
-COPY --from=build /app/bin/candle_setup_finder /app/bin
+#FROM scratch
+#COPY --from=build /runtime/ /
+#COPY --from=build /app/bin/candle_setup_finder /app/bin
 
-#FROM debian:buster-slim
+FROM debian:buster-slim
 
-#WORKDIR /app
+WORKDIR /app
 
-#COPY --from=build /app/bin/candle_setup_finder /app/candle_setup_finder
+COPY --from=build /app/bin/candle_setup_finder /app/candle_setup_finder
 
 # Expose the application entry point
 ENTRYPOINT ["/app/bin/candle_setup_finder"]
