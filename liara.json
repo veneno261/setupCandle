@@ -1,0 +1,8 @@
+{
+  "app": "candle_setup_finder",
+  "port": 8080,
+  "build": {
+    "location": "germany"
+  },
+  "disks": []
+}
