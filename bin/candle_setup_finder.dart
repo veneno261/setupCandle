@@ -156,6 +156,7 @@ void main(List<String> arguments) async {
   // Schedule to run every 15 minutes at exact intervals (e.g., 00:15, 00:30, 00:45)
   cron.schedule(Schedule.parse('*/15 * * * *'), () async {
     print('************* 15 minute *************');
+bot.sendMessage("15 minutes");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
@@ -175,6 +176,7 @@ void main(List<String> arguments) async {
   // Schedule to run every hour at exact intervals (e.g., 01:00, 02:00, etc.)
   cron.schedule(Schedule.parse('30 * * * *'), () async {
     print('************* 1 hour *************');
+bot.sendMessage("1 hour");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
@@ -194,6 +196,7 @@ void main(List<String> arguments) async {
   // Schedule to run every 4 hours (e.g., 00:00, 04:00, 08:00, etc.)
   cron.schedule(Schedule.parse('30 */4 * * *'), () async {
     print('************* 4 hour *************');
+bot.sendMessage("4 hour");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
@@ -213,6 +216,7 @@ void main(List<String> arguments) async {
   // Schedule to run once a day at midnight (00:00)
   cron.schedule(Schedule.parse('30 3 * * *'), () async {
     print('************* Daily *************');
+bot.sendMessage("daily");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
