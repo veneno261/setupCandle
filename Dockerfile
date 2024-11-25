@@ -22,11 +22,5 @@ FROM scratch
 COPY --from=build /runtime/ /
 COPY --from=build /app/bin/candle_setup_finder /app/bin
 
-#FROM debian:buster-slim
-
-# WORKDIR /app
-
-# COPY --from=build /app/bin/candle_setup_finder /app/candle_setup_finder
-
 # Expose the application entry point
 ENTRYPOINT ["./app/bin/candle_setup_finder"]
