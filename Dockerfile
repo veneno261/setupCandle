@@ -29,4 +29,4 @@ COPY --from=build /app/bin/candle_setup_finder /app/bin
 # COPY --from=build /app/bin/candle_setup_finder /app/candle_setup_finder
 
 # Expose the application entry point
-ENTRYPOINT ["/app/bin/candle_setup_finder"]
+ENTRYPOINT ["./app/bin/candle_setup_finder"]
