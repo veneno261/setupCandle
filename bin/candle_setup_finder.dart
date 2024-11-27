@@ -95,12 +95,11 @@ void main(List<String> arguments) async {
     'MANA',
     'ZEN',
     'AXS',
-    'XNO',
+    'VET',
     'FIL',
     'FLOW',
     'COTI',
     'SCRT',
-    'UNI',
     'UNI',
   ];
   final int lookBack = 2;
