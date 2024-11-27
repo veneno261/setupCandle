@@ -28,7 +28,7 @@ CandleModelResponse findSetupCandle({
   required String dhm,
 }) {
   
-  if(candles['Data']['Data'] is null){
+  if(candles['Data']['Data'] == null){
     return CandleModelResponse(
       isSetupCandle: false,
       candleColor: '',
