@@ -211,7 +211,7 @@ void main(List<String> arguments) async {
 
   // Schedule to run every hour at exact intervals (e.g., 01:00, 02:00, etc.)
   cron.schedule(Schedule.parse('30 * * * *'), () async {
-    print('************* 1 hour *************');
+    print('********* 1 hour *********');
     bot.sendMessage("1 HOUR cron job executed");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
