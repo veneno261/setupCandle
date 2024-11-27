@@ -170,7 +170,7 @@ void main(List<String> arguments) async {
               ? 'Daily'
               : response.dhm == 'histominute'
                   ? '15 Minute'
-                  : '${response.dhm} Hour',
+                  : '${response.timeFrame} Hour',
           candle: '${response.candleDirection}  🐂 / ${response.candleColor}',
           signal: 'Long 📈',
         ).toString());
@@ -189,7 +189,7 @@ void main(List<String> arguments) async {
               ? 'Daily'
               : response.dhm == 'histominute'
                   ? '15 Minute'
-                  : '${response.dhm} Hour',
+                  : '${response.timeFrame} Hour',
           candle: '${response.candleDirection}  🐻 / ${response.candleColor}',
           signal: 'Short 📉',
         ).toString());
@@ -243,7 +243,7 @@ void main(List<String> arguments) async {
   // });
 
   // Schedule to run every hour at exact intervals (e.g., 01:00, 02:00, etc.)
-  cron.schedule(Schedule.parse('30 * * * *'), () async {
+  cron.schedule(Schedule.parse('0 * * * *'), () async {
     print('************* 1 hour *************');
     bot.sendMessage("1 HOUR cron job executed");
     for (String token in tokens) {
@@ -263,7 +263,7 @@ void main(List<String> arguments) async {
   });
 
   // Schedule to run every 4 hours (e.g., 00:00, 04:00, 08:00, etc.)
-  cron.schedule(Schedule.parse('30 */4 * * *'), () async {
+  cron.schedule(Schedule.parse('0 */4 * * *'), () async {
     print('************* 4 hour *************');
     bot.sendMessage("4 HOUR cron job executed");
     for (String token in tokens) {
@@ -283,7 +283,7 @@ void main(List<String> arguments) async {
   });
 
   // Schedule to run once a day at midnight (00:00)
-  cron.schedule(Schedule.parse('30 3 * * *'), () async {
+  cron.schedule(Schedule.parse('0 3 * * *'), () async {
     print('************* Daily *************');
     bot.sendMessage("DAILY cron job executed");
     for (String token in tokens) {
