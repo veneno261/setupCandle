@@ -16,7 +16,7 @@ void main(List<String> arguments) async {
 
   bot.sendMessage("bot start successfully");
 
-  // TODO: calculate sma degree and count it is
+  // TODO: calculate sma degree and count it isaaa
   // TODO: get chart screenshot
 
   /// list of calculate sma`s
