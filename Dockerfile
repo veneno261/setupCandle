@@ -25,7 +25,7 @@ RUN dart compile exe bin/candle_setup_finder.dart -o bin/candle_setup_finder
 
 FROM scratch
 COPY --from=build /runtime/ /
-COPY --from=build /app/bin/candle_setup_finder /app/bin
+COPY --from=build /app/bin/candle_setup_finder /app/bin/
 
 # Expose the application entry point
-ENTRYPOINT ["./app/bin/candle_setup_finder"]
+ENTRYPOINT ["/app/bin/candle_setup_finder"]
