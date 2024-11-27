@@ -87,6 +87,8 @@ void main(List<String> arguments) async {
     dhm: 'histominute',
   );
 
+  bot.sendMessage("bot start successfully");
+
   CandleModelResponse response = CandleModelResponse.initialize();
 
   final findSetupCandleBloc = FindSetupCandle();

@@ -10,6 +10,11 @@ COPY pubspec.* ./
 # Get dependencies
 RUN dart pub get
 
+# Step 5: Check for outdated dependencies
+# This step will print a summary of outdated dependencies in the logs
+# Don't fail the build if outdated dependencies are found
+RUN dart pub outdated || true
+
 COPY . .
 
 # Ensure all dependencies are resolved and downloaded
