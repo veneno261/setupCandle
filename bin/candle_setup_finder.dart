@@ -67,6 +67,7 @@ void main(List<String> arguments) async {
     'COTI',
     'SCRT',
     'UNI',
+    'UNI',
   ];
   final int lookBack = 2;
   final String tokenConvert = 'USDT';
