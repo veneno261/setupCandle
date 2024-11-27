@@ -14,6 +14,8 @@ void main(List<String> arguments) async {
   final cron = Cron();
   final bot = TelegramBot();
 
+  bot.sendMessage("bot start successfully");
+
   // TODO: calculate sma degree and count it
   // TODO: get chart screenshot
 
@@ -86,8 +88,6 @@ void main(List<String> arguments) async {
     timeFrame: '15',
     dhm: 'histominute',
   );
-
-  bot.sendMessage("bot start successfully");
 
   CandleModelResponse response = CandleModelResponse.initialize();
 
