@@ -27,6 +27,23 @@ CandleModelResponse findSetupCandle({
   required String timFrame,
   required String dhm,
 }) {
+  
+  if(candles['Data']['Data'] == null){
+    return CandleModelResponse(
+      isSetupCandle: false,
+      candleColor: '',
+      candleDirection: '',
+      tokenName: tokenName,
+      timeFrame: timFrame,
+      dhm: dhm,
+      open: 0.0,
+      close: 0.0,
+      high: 0.0,
+      low: 0.0,
+      response: candles,
+    );
+  }
+  
   //print(candles['Data']['Data']);
   CandleModel candle = CandleModel.fromJson(candles['Data']['Data'][candles['Data']['Data'].length - lookBack]);
 

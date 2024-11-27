@@ -1,4 +1,9 @@
 import 'dart:async';
+import 'dart:io';
+
+import 'package:shelf/shelf.dart';
+import 'package:shelf/shelf_io.dart';
+import 'package:shelf_router/shelf_router.dart';
 
 import 'package:cron/cron.dart';
 
@@ -8,7 +13,36 @@ import 'package:candle_setup_finder/logics/bot_message.dart';
 import 'package:candle_setup_finder/models/bot_message_template.dart';
 import 'package:candle_setup_finder/models/candle_model_response.dart';
 
+
+// Configure routes.
+final _router = Router()
+  ..get('/', _rootHandler)
+  ..get('/echo/<message>', _echoHandler);
+
+Response _rootHandler(Request req) {
+  return Response.ok('Hello, World!\n');
+}
+
+Response _echoHandler(Request request) {
+  final message = request.params['message'];
+  return Response.ok('$message\n');
+}
+
+
+
 void main(List<String> arguments) async {
+  
+  // Use any available host or container IP (usually `0.0.0.0`).
+  final ip = InternetAddress.anyIPv4;
+
+  // Configure a pipeline that logs requests.
+  final handler =
+      Pipeline().addMiddleware(logRequests()).addHandler(_router.call);
+  
+  // For running in containers, we respect the PORT environment variable.
+  final port = int.parse(Platform.environment['PORT'] ?? '8080');
+  final server = await serve(handler, ip, port);
+  
   //'8159444945:AAFREaeS7veuvpiG_oFDEogcQASvBJSpU78', '60596350'
 
   final cron = Cron();
@@ -61,12 +95,11 @@ void main(List<String> arguments) async {
     'MANA',
     'ZEN',
     'AXS',
-    'XNO',
+    'VET',
     'FIL',
     'FLOW',
     'COTI',
     'SCRT',
-    'UNI',
     'UNI',
   ];
   final int lookBack = 2;
@@ -270,6 +303,8 @@ void main(List<String> arguments) async {
   });
 
   print('Cron jobs scheduled.');
+  
+  print('Server listening on port ${server.port}');
 
   await subscription.asFuture();
   await smaSubscription.asFuture();
