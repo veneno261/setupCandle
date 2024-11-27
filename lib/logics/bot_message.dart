@@ -2,20 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class TelegramBot {
-  final String botToken;
-  final String chatId;
-
-  TelegramBot(this.botToken, this.chatId);
-
   Future<void> sendMessage(String message) async {
-    final url = 'https://api.telegram.org/bot$botToken/sendMessage';
+    final url = 'https://nodejs-w8xcuv.chbk.app/send_message';
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'chat_id': chatId,
-        'text': message,
-      }),
+      body: jsonEncode({"message": message}),
     );
 
     if (response.statusCode == 200) {

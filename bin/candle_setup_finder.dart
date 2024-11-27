@@ -9,8 +9,10 @@ import 'package:candle_setup_finder/models/bot_message_template.dart';
 import 'package:candle_setup_finder/models/candle_model_response.dart';
 
 void main(List<String> arguments) async {
+  //'8159444945:AAFREaeS7veuvpiG_oFDEogcQASvBJSpU78', '60596350'
+
   final cron = Cron();
-  final bot = TelegramBot('8159444945:AAFREaeS7veuvpiG_oFDEogcQASvBJSpU78', '60596350');
+  final bot = TelegramBot();
 
   // TODO: calculate sma degree and count it
   // TODO: get chart screenshot
