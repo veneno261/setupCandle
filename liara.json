@@ -1,8 +1,8 @@
 {
-  "app":"setup"
-  "port":3000
+  "app":"setup",
+  "port":3000,
   "build":{
     "location":"iran"
-  }
+  },
   "disks":[]
 }
