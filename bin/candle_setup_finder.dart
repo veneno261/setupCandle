@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:candle_setup_finder/bloc/chart_img/get_chart_image_bloc.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -12,7 +13,6 @@ import 'package:candle_setup_finder/bloc/setup_candle/find_setup_candle_bloc.dar
 import 'package:candle_setup_finder/logics/bot_message.dart';
 import 'package:candle_setup_finder/models/bot_message_template.dart';
 import 'package:candle_setup_finder/models/candle_model_response.dart';
-
 
 // Configure routes.
 final _router = Router()
@@ -28,27 +28,23 @@ Response _echoHandler(Request request) {
   return Response.ok('$message\n');
 }
 
-
-
 void main(List<String> arguments) async {
-  
   // Use any available host or container IP (usually `0.0.0.0`).
   final ip = InternetAddress.anyIPv4;
 
   // Configure a pipeline that logs requests.
-  final handler =
-      Pipeline().addMiddleware(logRequests()).addHandler(_router.call);
-  
+  final handler = Pipeline().addMiddleware(logRequests()).addHandler(_router.call);
+
   // For running in containers, we respect the PORT environment variable.
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
   final server = await serve(handler, ip, port);
-  
+
   //'8159444945:AAFREaeS7veuvpiG_oFDEogcQASvBJSpU78', '60596350'
 
   final cron = Cron();
   final bot = TelegramBot();
 
-  bot.sendMessage("bot start successfully");
+  //bot.sendMessage(message: "bot start successfully");
 
   // TODO: calculate sma degree and count it isaaa
   // TODO: get chart screenshot
@@ -107,6 +103,7 @@ void main(List<String> arguments) async {
   final String exchange = 'binance';
   final String candleLimit = '110';
   String timeFrame = '1';
+  BotMessageTemplate botMessageTemplate;
 
   /// daily , hourly or minutly time frame api
   String dhm = 'histohour';
@@ -127,6 +124,7 @@ void main(List<String> arguments) async {
 
   final findSetupCandleBloc = FindSetupCandle();
   final calculateSmasBloc = CalculateSmas();
+  final chartImageBloc = ChartImageBloc();
 
   StreamSubscription subscription = findSetupCandleBloc.stream.listen((setupCandleState) async {
     if (setupCandleState is FindSetupCandleIsCompeleted) {
@@ -155,7 +153,7 @@ void main(List<String> arguments) async {
       sma25 = smas[1][smas[1].length - lookBack];
       sma99 = smas[2][smas[2].length - lookBack];
 
-      if (response.candleDirection == 'Bullish' && response.high > sma25) {
+      if (response.candleDirection == 'Bullish' && response.high > sma25 && response.high > sma99) {
         print('\\**** find LONG setup candle above sma 25 ****//');
         print('A setup candle found: ${response.open}, ${response.high}, ${response.low}, ${response.close}');
         print('sma 7 - 25 - 99: $sma7 - $sma25 - $sma99');
@@ -164,7 +162,8 @@ void main(List<String> arguments) async {
         print('Candle Direction: ${response.candleDirection}');
         print('Candle Color: ${response.candleColor}');
         print('\n');
-        bot.sendMessage(BotMessageTemplate(
+
+        botMessageTemplate = BotMessageTemplate(
           tokenName: response.tokenName,
           timeFrame: response.dhm == 'histoday'
               ? 'Daily'
@@ -172,9 +171,15 @@ void main(List<String> arguments) async {
                   ? '15 Minute'
                   : '${response.timeFrame} Hour',
           candle: '${response.candleDirection}  🐂 / ${response.candleColor}',
-          signal: 'Long 📈',
-        ).toString());
-      } else if (response.candleDirection == 'Bearish' && response.low < sma25) {
+          signal: '🟩 Long 📈',
+        );
+
+        chartImageBloc.add(GetChartImageEvent(
+          tokenName: '${response.tokenName}USDT',
+          interval: '${response.dhm == 'histoday' ? '1D' : response.dhm == 'histominute' ? '15m' : '${response.timeFrame}h'}',
+          botMessage: botMessageTemplate,
+        ));
+      } else if (response.candleDirection == 'Bearish' && response.low < sma25 && response.low < sma99) {
         print('\\**** find SHORT setup candle under sma 25 ****//');
         print('A setup candle found: ${response.open}, ${response.high}, ${response.low}, ${response.close}');
         print('sma 7 - 25 - 99: $sma7 - $sma25 - $sma99');
@@ -183,7 +188,8 @@ void main(List<String> arguments) async {
         print('Candle Direction: ${response.candleDirection}');
         print('Candle Color: ${response.candleColor}');
         print('\n');
-        bot.sendMessage(BotMessageTemplate(
+
+        botMessageTemplate = BotMessageTemplate(
           tokenName: response.tokenName,
           timeFrame: response.dhm == 'histoday'
               ? 'Daily'
@@ -191,8 +197,14 @@ void main(List<String> arguments) async {
                   ? '15 Minute'
                   : '${response.timeFrame} Hour',
           candle: '${response.candleDirection}  🐻 / ${response.candleColor}',
-          signal: 'Short 📉',
-        ).toString());
+          signal: '🟥 Short 📉',
+        );
+
+        chartImageBloc.add(GetChartImageEvent(
+          tokenName: '${response.tokenName}USDT',
+          interval: '${response.dhm == 'histoday' ? '1D' : response.dhm == 'histominute' ? '15m' : '${response.timeFrame}h'}',
+          botMessage: botMessageTemplate,
+        ));
       } else {
         print('Can`t found setup candle for: ${response.tokenName}\n');
       }
@@ -201,26 +213,40 @@ void main(List<String> arguments) async {
     }
   });
 
-  // tokens = [
-  //   'KAVA',
-  //   // 'UNI',
-  //   // '1INCH',
-  //   // 'LDO',
-  // ];
-  // for (String token in tokens) {
-  //   event = FindSetupCandleEvent(
-  //     lookBack: lookBack,
-  //     exchange: exchange,
-  //     tokenName: token,
-  //     tokenConvert: tokenConvert,
-  //     candleLimit: candleLimit,
-  //     timeFrame: '15',
-  //     dhm: 'histominute',
-  //   );
-  //   findSetupCandleBloc.add(event);
-  //   await Future.delayed(Duration(seconds: 1));
-  //   await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
-  // }
+  // get chart image if there is setup candle and if i can get chart image send it to bot and if i cant then send a simple message to bot
+  StreamSubscription chartImgSubscription = chartImageBloc.stream.listen((chartImgState) {
+    if (chartImgState is ChartImageStateIsCompeleted) {
+      bot.sendMessage(
+        message: chartImgState.botMessage.toString(),
+        chartImg: chartImgState.chartImg,
+      );
+    } else if (chartImgState is ChartImageStateGotError) {
+      bot.sendMessage(
+        message: chartImgState.botMessage.toString(),
+      );
+    }
+  });
+
+  tokens = [
+    'STX',
+    // 'UNI',
+    // '1INCH',
+    // 'LDO',
+  ];
+  for (String token in tokens) {
+    event = FindSetupCandleEvent(
+      lookBack: lookBack,
+      exchange: exchange,
+      tokenName: token,
+      tokenConvert: tokenConvert,
+      candleLimit: candleLimit,
+      timeFrame: '1',
+      dhm: dhm,
+    );
+    findSetupCandleBloc.add(event);
+    await Future.delayed(Duration(seconds: 1));
+    await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
+  }
 
   // Schedule to run every 15 minutes at exact intervals (e.g., 00:15, 00:30, 00:45)
   // cron.schedule(Schedule.parse('*/15 * * * *'), () async {
@@ -243,71 +269,72 @@ void main(List<String> arguments) async {
   // });
 
   // Schedule to run every hour at exact intervals (e.g., 01:00, 02:00, etc.)
-  cron.schedule(Schedule.parse('0 * * * *'), () async {
-    print('************* 1 hour *************');
-    bot.sendMessage("1 HOUR cron job executed");
-    for (String token in tokens) {
-      event = FindSetupCandleEvent(
-        lookBack: lookBack,
-        exchange: exchange,
-        tokenName: token,
-        tokenConvert: tokenConvert,
-        candleLimit: candleLimit,
-        timeFrame: timeFrame,
-        dhm: dhm,
-      );
-      findSetupCandleBloc.add(event);
-      await Future.delayed(Duration(seconds: 1));
-      await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
-    }
-  });
+  // cron.schedule(Schedule.parse('0 * * * *'), () async {
+  //   print('************* 1 hour *************');
+  //   bot.sendMessage("1 HOUR cron job executed");
+  //   for (String token in tokens) {
+  //     event = FindSetupCandleEvent(
+  //       lookBack: lookBack,
+  //       exchange: exchange,
+  //       tokenName: token,
+  //       tokenConvert: tokenConvert,
+  //       candleLimit: candleLimit,
+  //       timeFrame: timeFrame,
+  //       dhm: dhm,
+  //     );
+  //     findSetupCandleBloc.add(event);
+  //     await Future.delayed(Duration(seconds: 1));
+  //     await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
+  //   }
+  // });
 
-  // Schedule to run every 4 hours (e.g., 00:00, 04:00, 08:00, etc.)
-  cron.schedule(Schedule.parse('0 */4 * * *'), () async {
-    print('************* 4 hour *************');
-    bot.sendMessage("4 HOUR cron job executed");
-    for (String token in tokens) {
-      event = FindSetupCandleEvent(
-        lookBack: lookBack,
-        exchange: exchange,
-        tokenName: token,
-        tokenConvert: tokenConvert,
-        candleLimit: candleLimit,
-        timeFrame: '4',
-        dhm: dhm,
-      );
-      findSetupCandleBloc.add(event);
-      await Future.delayed(Duration(seconds: 1));
-      await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
-    }
-  });
+  // // Schedule to run every 4 hours (e.g., 00:00, 04:00, 08:00, etc.)
+  // cron.schedule(Schedule.parse('0 */4 * * *'), () async {
+  //   print('************* 4 hour *************');
+  //   bot.sendMessage("4 HOUR cron job executed");
+  //   for (String token in tokens) {
+  //     event = FindSetupCandleEvent(
+  //       lookBack: lookBack,
+  //       exchange: exchange,
+  //       tokenName: token,
+  //       tokenConvert: tokenConvert,
+  //       candleLimit: candleLimit,
+  //       timeFrame: '4',
+  //       dhm: dhm,
+  //     );
+  //     findSetupCandleBloc.add(event);
+  //     await Future.delayed(Duration(seconds: 1));
+  //     await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
+  //   }
+  // });
 
-  // Schedule to run once a day at midnight (00:00)
-  cron.schedule(Schedule.parse('0 3 * * *'), () async {
-    print('************* Daily *************');
-    bot.sendMessage("DAILY cron job executed");
-    for (String token in tokens) {
-      event = FindSetupCandleEvent(
-        lookBack: lookBack,
-        exchange: exchange,
-        tokenName: token,
-        tokenConvert: tokenConvert,
-        candleLimit: candleLimit,
-        timeFrame: timeFrame,
-        dhm: 'histoday',
-      );
-      findSetupCandleBloc.add(event);
-      await Future.delayed(Duration(seconds: 1));
-      await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
-    }
-  });
+  // // Schedule to run once a day at midnight (00:00)
+  // cron.schedule(Schedule.parse('0 3 * * *'), () async {
+  //   print('************* Daily *************');
+  //   bot.sendMessage("DAILY cron job executed");
+  //   for (String token in tokens) {
+  //     event = FindSetupCandleEvent(
+  //       lookBack: lookBack,
+  //       exchange: exchange,
+  //       tokenName: token,
+  //       tokenConvert: tokenConvert,
+  //       candleLimit: candleLimit,
+  //       timeFrame: timeFrame,
+  //       dhm: 'histoday',
+  //     );
+  //     findSetupCandleBloc.add(event);
+  //     await Future.delayed(Duration(seconds: 1));
+  //     await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
+  //   }
+  // });
 
   print('Cron jobs scheduled.');
-  
+
   print('Server listening on port ${server.port}');
 
   await subscription.asFuture();
   await smaSubscription.asFuture();
+  await chartImgSubscription.asFuture();
 }
 
 Future<void> waitForStateChange(bool Function() condition) async {

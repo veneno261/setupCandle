@@ -1,9 +1,10 @@
+import 'package:http/http.dart' as http;
+
 class BotMessageTemplate {
   final String tokenName;
   final String timeFrame;
   final String candle;
   final String signal;
-  //final String chartLink;
 
   BotMessageTemplate({
     required this.tokenName,
@@ -15,10 +16,14 @@ class BotMessageTemplate {
   @override
   String toString() {
     return """
-    *************** 🤑 ${tokenName.toUpperCase()} 🤑 ***************
+***************🤑 ${tokenName.toUpperCase()} 🤑***************
 Time Frame: $timeFrame ⏰
+
 Direction: $signal
+
 Candle: $candle
+
+Link : [Go to chart](https://www.tradingview.com/symbols/BINANCE:${tokenName.toUpperCase()}USDT/)
     """;
   }
 }
