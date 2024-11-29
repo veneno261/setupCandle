@@ -44,7 +44,7 @@ void main(List<String> arguments) async {
   final cron = Cron();
   final bot = TelegramBot();
 
-  //bot.sendMessage(message: "bot start successfully");
+  bot.sendMessage(message: "bot start successfully");
 
   // TODO: calculate sma degree and count it isaaa
   // TODO: get chart screenshot
@@ -227,31 +227,31 @@ void main(List<String> arguments) async {
     }
   });
 
-  tokens = [
-    'STX',
-    // 'UNI',
-    // '1INCH',
-    // 'LDO',
-  ];
-  for (String token in tokens) {
-    event = FindSetupCandleEvent(
-      lookBack: lookBack,
-      exchange: exchange,
-      tokenName: token,
-      tokenConvert: tokenConvert,
-      candleLimit: candleLimit,
-      timeFrame: '1',
-      dhm: dhm,
-    );
-    findSetupCandleBloc.add(event);
-    await Future.delayed(Duration(seconds: 1));
-    await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
-  }
+  // tokens = [
+  //   'STX',
+  //   // 'UNI',
+  //   // '1INCH',
+  //   // 'LDO',
+  // ];
+  // for (String token in tokens) {
+  //   event = FindSetupCandleEvent(
+  //     lookBack: lookBack,
+  //     exchange: exchange,
+  //     tokenName: token,
+  //     tokenConvert: tokenConvert,
+  //     candleLimit: candleLimit,
+  //     timeFrame: '1',
+  //     dhm: dhm,
+  //   );
+  //   findSetupCandleBloc.add(event);
+  //   await Future.delayed(Duration(seconds: 1));
+  //   await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
+  // }
 
-  // Schedule to run every 15 minutes at exact intervals (e.g., 00:15, 00:30, 00:45)
+  //Schedule to run every 15 minutes at exact intervals (e.g., 00:15, 00:30, 00:45)
   // cron.schedule(Schedule.parse('*/15 * * * *'), () async {
   //   print('************* 15 minute *************');
-  //   bot.sendMessage("15 minutes");
+  //   bot.sendMessage(message: "15 minutes");
   //   for (String token in tokens) {
   //     event = FindSetupCandleEvent(
   //       lookBack: lookBack,
@@ -268,65 +268,65 @@ void main(List<String> arguments) async {
   //   }
   // });
 
-  // Schedule to run every hour at exact intervals (e.g., 01:00, 02:00, etc.)
-  // cron.schedule(Schedule.parse('0 * * * *'), () async {
-  //   print('************* 1 hour *************');
-  //   bot.sendMessage("1 HOUR cron job executed");
-  //   for (String token in tokens) {
-  //     event = FindSetupCandleEvent(
-  //       lookBack: lookBack,
-  //       exchange: exchange,
-  //       tokenName: token,
-  //       tokenConvert: tokenConvert,
-  //       candleLimit: candleLimit,
-  //       timeFrame: timeFrame,
-  //       dhm: dhm,
-  //     );
-  //     findSetupCandleBloc.add(event);
-  //     await Future.delayed(Duration(seconds: 1));
-  //     await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
-  //   }
-  // });
+  //Schedule to run every hour at exact intervals (e.g., 01:00, 02:00, etc.)
+  cron.schedule(Schedule.parse('0 * * * *'), () async {
+    print('************* 1 hour *************');
+    bot.sendMessage(message: "1 HOUR cron job executed");
+    for (String token in tokens) {
+      event = FindSetupCandleEvent(
+        lookBack: lookBack,
+        exchange: exchange,
+        tokenName: token,
+        tokenConvert: tokenConvert,
+        candleLimit: candleLimit,
+        timeFrame: timeFrame,
+        dhm: dhm,
+      );
+      findSetupCandleBloc.add(event);
+      await Future.delayed(Duration(seconds: 1));
+      await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
+    }
+  });
 
-  // // Schedule to run every 4 hours (e.g., 00:00, 04:00, 08:00, etc.)
-  // cron.schedule(Schedule.parse('0 */4 * * *'), () async {
-  //   print('************* 4 hour *************');
-  //   bot.sendMessage("4 HOUR cron job executed");
-  //   for (String token in tokens) {
-  //     event = FindSetupCandleEvent(
-  //       lookBack: lookBack,
-  //       exchange: exchange,
-  //       tokenName: token,
-  //       tokenConvert: tokenConvert,
-  //       candleLimit: candleLimit,
-  //       timeFrame: '4',
-  //       dhm: dhm,
-  //     );
-  //     findSetupCandleBloc.add(event);
-  //     await Future.delayed(Duration(seconds: 1));
-  //     await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
-  //   }
-  // });
+  // Schedule to run every 4 hours (e.g., 00:00, 04:00, 08:00, etc.)
+  cron.schedule(Schedule.parse('0 */4 * * *'), () async {
+    print('************* 4 hour *************');
+    bot.sendMessage(message: "4 HOUR cron job executed");
+    for (String token in tokens) {
+      event = FindSetupCandleEvent(
+        lookBack: lookBack,
+        exchange: exchange,
+        tokenName: token,
+        tokenConvert: tokenConvert,
+        candleLimit: candleLimit,
+        timeFrame: '4',
+        dhm: dhm,
+      );
+      findSetupCandleBloc.add(event);
+      await Future.delayed(Duration(seconds: 1));
+      await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
+    }
+  });
 
-  // // Schedule to run once a day at midnight (00:00)
-  // cron.schedule(Schedule.parse('0 3 * * *'), () async {
-  //   print('************* Daily *************');
-  //   bot.sendMessage("DAILY cron job executed");
-  //   for (String token in tokens) {
-  //     event = FindSetupCandleEvent(
-  //       lookBack: lookBack,
-  //       exchange: exchange,
-  //       tokenName: token,
-  //       tokenConvert: tokenConvert,
-  //       candleLimit: candleLimit,
-  //       timeFrame: timeFrame,
-  //       dhm: 'histoday',
-  //     );
-  //     findSetupCandleBloc.add(event);
-  //     await Future.delayed(Duration(seconds: 1));
-  //     await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
-  //   }
-  // });
+  // Schedule to run once a day at midnight (00:00)
+  cron.schedule(Schedule.parse('0 3 * * *'), () async {
+    print('************* Daily *************');
+    bot.sendMessage(message: "DAILY cron job executed");
+    for (String token in tokens) {
+      event = FindSetupCandleEvent(
+        lookBack: lookBack,
+        exchange: exchange,
+        tokenName: token,
+        tokenConvert: tokenConvert,
+        candleLimit: candleLimit,
+        timeFrame: timeFrame,
+        dhm: 'histoday',
+      );
+      findSetupCandleBloc.add(event);
+      await Future.delayed(Duration(seconds: 1));
+      await waitForStateChange(() => findSetupCandleBloc.state is FindSetupCandleIsCompeleted);
+    }
+  });
 
   print('Cron jobs scheduled.');
 
