@@ -32,11 +32,11 @@ class ChartImgApi {
       "name": "Moving Average Multiple",
       "input": {
         "firstPeriods": 7,
-        "secondPeriods": 25,
-        "thirdPeriods": 99,
-       // "fourthPeriods": 50,
-       // "fifthPeriods": 100,
-       // "sixthPeriods": 200,
+        "secondPeriods": 7,
+        "thirdPeriods": 25,
+        "fourthPeriods": 25,
+        "fifthPeriods": 99,
+        "sixthPeriods": 99,
         "method": "Simple"
       },
       "override": {
@@ -49,15 +49,15 @@ class ChartImgApi {
         "Plot 3.linewidth": 1,
         "Plot 3.plottype": "line",
         "Plot 3.color": "rgb(67,160,71)",
-       // "Plot 4.linewidth": 1,
-        //"Plot 4.plottype": "line",
-        //"Plot 4.color": "rgb(38,198,218)",
-       // "Plot 5.linewidth": 1,
-       // "Plot 5.plottype": "line",
-       // "Plot 5.color": "rgb(245,0,87)",
-       // "Plot 6.linewidth": 1,
-       // "Plot 6.plottype": "line",
-       // "Plot 6.color": "rgb(33,150,243)"
+        "Plot 4.linewidth": 1,
+        "Plot 4.plottype": "line",
+        "Plot 4.color": "rgb(38,198,218)",
+        "Plot 5.linewidth": 1,
+        "Plot 5.plottype": "line",
+        "Plot 5.color": "rgb(245,0,87)",
+        "Plot 6.linewidth": 1,
+        "Plot 6.plottype": "line",
+        "Plot 6.color": "rgb(33,150,243)"
       }
     }
   ]
