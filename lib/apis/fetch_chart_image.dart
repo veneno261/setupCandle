@@ -26,6 +26,7 @@ class ChartImgApi {
       'height': height.toString(),
       'style': style,
       'theme': theme,
+      'scale': 'logarithmic',
       'studies':  [
     {
       "name": "Moving Average Multiple",
