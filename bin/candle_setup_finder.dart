@@ -58,14 +58,14 @@ void main(List<String> arguments) async {
   List<String> tokens = [
     'BTC',
     'SOL',
-    'SUI',
+    'ACT',
     'MOVR',
-    'CELR',
+    'ZRO',
     'XRP',
     'ETH',
     'OM',
     'VTHO',
-    'TIA',
+    'ENA',
     'AXL',
     'LDO',
     'AEVO',
@@ -79,7 +79,7 @@ void main(List<String> arguments) async {
     'PIXEL',
     'MEME',
     'SEI',
-    'FET',
+    'ZK',
     'WOO',
     'PORTAL',
     'CELO',
@@ -88,7 +88,7 @@ void main(List<String> arguments) async {
     'ENJ',
     'ONE',
     'SAND',
-    'MANA',
+    'APE',
     'ZEN',
     'AXS',
     'VET',
@@ -153,7 +153,7 @@ void main(List<String> arguments) async {
       sma25 = smas[1][smas[1].length - lookBack];
       sma99 = smas[2][smas[2].length - lookBack];
 
-      if (response.candleDirection == 'Bullish' && response.high > sma25 && response.high > sma99) {
+      if (response.candleDirection == 'Bullish' && response.high > sma7 && sma7 > sma25 && response.high > sma99) {
         print('\\**** find LONG setup candle above sma 25 ****//');
         print('A setup candle found: ${response.open}, ${response.high}, ${response.low}, ${response.close}');
         print('sma 7 - 25 - 99: $sma7 - $sma25 - $sma99');
@@ -179,7 +179,7 @@ void main(List<String> arguments) async {
           interval: '${response.dhm == 'histoday' ? '1D' : response.dhm == 'histominute' ? '15m' : '${response.timeFrame}h'}',
           botMessage: botMessageTemplate,
         ));
-      } else if (response.candleDirection == 'Bearish' && response.low < sma25 && response.low < sma99) {
+      } else if (response.candleDirection == 'Bearish' && response.low < sma7 && sma7 < sma25 && response.low < sma99) {
         print('\\**** find SHORT setup candle under sma 25 ****//');
         print('A setup candle found: ${response.open}, ${response.high}, ${response.low}, ${response.close}');
         print('sma 7 - 25 - 99: $sma7 - $sma25 - $sma99');
@@ -271,7 +271,7 @@ void main(List<String> arguments) async {
   //Schedule to run every hour at exact intervals (e.g., 01:00, 02:00, etc.)
   cron.schedule(Schedule.parse('0 * * * *'), () async {
     print('************* 1 hour *************');
-    bot.sendMessage(message: "1 HOUR cron job executed");
+    bot.sendMessage(message: "#1_HOUR cron job executed");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
@@ -291,7 +291,7 @@ void main(List<String> arguments) async {
   // Schedule to run every 4 hours (e.g., 00:00, 04:00, 08:00, etc.)
   cron.schedule(Schedule.parse('0 */4 * * *'), () async {
     print('************* 4 hour *************');
-    bot.sendMessage(message: "4 HOUR cron job executed");
+    bot.sendMessage(message: "#4_HOUR cron job executed");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
@@ -311,7 +311,7 @@ void main(List<String> arguments) async {
   // Schedule to run once a day at midnight (00:00)
   cron.schedule(Schedule.parse('0 3 * * *'), () async {
     print('************* Daily *************');
-    bot.sendMessage(message: "DAILY cron job executed");
+    bot.sendMessage(message: "#DAILY cron job executed");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,

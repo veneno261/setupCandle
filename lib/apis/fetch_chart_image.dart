@@ -27,40 +27,37 @@ class ChartImgApi {
       'style': style,
       'theme': theme,
       'scale': 'logarithmic',
-      'studies':  [
-    {
-      "name": "Moving Average Multiple",
-      "input": {
-        "firstPeriods": 7,
-        "secondPeriods": 7,
-        "thirdPeriods": 25,
-        "fourthPeriods": 25,
-        "fifthPeriods": 99,
-        "sixthPeriods": 99,
-        "method": "Simple"
-      },
-      "override": {
-        "Plot 1.linewidth": 1,
-        "Plot 1.plottype": "line",
-        "Plot 1.color": "rgb(156,39,176)",
-        "Plot 2.linewidth": 1,
-        "Plot 2.plottype": "line",
-        "Plot 2.color": "rgb(255,109,0)",
-        "Plot 3.linewidth": 1,
-        "Plot 3.plottype": "line",
-        "Plot 3.color": "rgb(67,160,71)",
-        "Plot 4.linewidth": 1,
-        "Plot 4.plottype": "line",
-        "Plot 4.color": "rgb(38,198,218)",
-        "Plot 5.linewidth": 1,
-        "Plot 5.plottype": "line",
-        "Plot 5.color": "rgb(245,0,87)",
-        "Plot 6.linewidth": 1,
-        "Plot 6.plottype": "line",
-        "Plot 6.color": "rgb(33,150,243)"
-      }
-    }
-  ]
+      "studies": [
+        {
+          "name": "Moving Average Triple",
+          "input": {
+            "firstPeriods": 7,
+            "secondPeriods": 25,
+            "thirdPeriods": 99,
+            "method": "Simple",
+          },
+          "override": {
+            "Plot 1.linewidth": 1,
+            "Plot 1.plottype": "line",
+            "Plot 1.color": "rgb(255,109,0)",
+            "Plot 2.linewidth": 1,
+            "Plot 2.plottype": "line",
+            "Plot 2.color": "rgb(33,150,243)",
+            "Plot 3.linewidth": 1,
+            "Plot 3.plottype": "line",
+            "Plot 3.color": "rgb(38,198,218)"
+          }
+        },
+        {
+          "name": "Volume",
+          "forceOverlay": false,
+          "override": {
+            "Volume.plottype": "columns",
+            "Volume.color.0": "rgba(247,82,95,0.5)",
+            "Volume.color.1": "rgba(34,171,148,0.5)",
+          }
+        }
+      ]
     };
 
     try {

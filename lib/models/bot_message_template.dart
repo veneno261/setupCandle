@@ -1,5 +1,3 @@
-import 'package:http/http.dart' as http;
-
 class BotMessageTemplate {
   final String tokenName;
   final String timeFrame;
@@ -16,7 +14,7 @@ class BotMessageTemplate {
   @override
   String toString() {
     return """
-***************🤑 ${tokenName.toUpperCase()} 🤑***************
+***************🤑 #${tokenName.toUpperCase()} 🤑***************
 Time Frame: $timeFrame ⏰
 
 Direction: $signal
