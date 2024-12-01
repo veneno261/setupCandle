@@ -9,6 +9,7 @@ class CandleModelResponse {
   final double close;
   final double high;
   final double low;
+  final double volume;
   final Map<String, dynamic>? response;
 
   CandleModelResponse({
@@ -22,6 +23,7 @@ class CandleModelResponse {
     required this.close,
     required this.high,
     required this.low,
+    required this.volume,
     this.response,
   });
 
@@ -37,6 +39,7 @@ class CandleModelResponse {
     double? close,
     double? high,
     double? low,
+    double? volume,
     Map<String, dynamic>? response,
   }) {
     return CandleModelResponse(
@@ -50,6 +53,7 @@ class CandleModelResponse {
       close: close ?? this.close,
       high: high ?? this.high,
       low: low ?? this.low,
+      volume: volume ?? this.volume,
       response: response ?? this.response,
     );
   }
@@ -65,6 +69,7 @@ class CandleModelResponse {
         close = 0.0,
         high = 0.0,
         low = 0.0,
+        volume = 0.0,
         response = null;
 
   Map<String, dynamic> toJson() {
@@ -79,6 +84,7 @@ class CandleModelResponse {
       'close': close,
       'high': high,
       'low': low,
+      'volume': volume,
     };
   }
 }
