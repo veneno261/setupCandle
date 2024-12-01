@@ -50,7 +50,7 @@ class ChartImgApi {
         },
         {
           "name": "Volume",
-          "forceOverlay": false,
+          "forceOverlay": true,
           "override": {
             "Volume.plottype": "columns",
             "Volume.color.0": "rgba(247,82,95,0.5)",
