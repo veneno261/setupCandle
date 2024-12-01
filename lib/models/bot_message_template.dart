@@ -14,14 +14,15 @@ class BotMessageTemplate {
   @override
   String toString() {
     return """
-***************🤑 #${tokenName.toUpperCase()} 🤑***************
+<b>🤑 #${tokenName.toUpperCase()} 🤑</b>
+
 Time Frame: $timeFrame ⏰
 
 Direction: $signal
 
 Candle: $candle
 
-Link : [Go to chart](https://www.tradingview.com/symbols/BINANCE:${tokenName.toUpperCase()}USDT/)
+Link : <a href="https://www.tradingview.com/symbols/BINANCE:${tokenName.toUpperCase()}USDT/">${tokenName.toUpperCase()}/USDT chart</a>
     """;
   }
 }
