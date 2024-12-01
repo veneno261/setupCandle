@@ -44,7 +44,7 @@ void main(List<String> arguments) async {
   final cron = Cron();
   final bot = TelegramBot();
 
-  bot.sendMessage(message: "bot start successfully");
+  bot.sendMessage(message: "%23bot start successfully");
 
   // TODO: calculate sma degree and count it isaaa
   // TODO: get chart screenshot
@@ -271,7 +271,7 @@ void main(List<String> arguments) async {
   //Schedule to run every hour at exact intervals (e.g., 01:00, 02:00, etc.)
   cron.schedule(Schedule.parse('0 * * * *'), () async {
     print('************* 1 hour *************');
-    bot.sendMessage(message: "#1_HOUR cron job executed");
+    bot.sendMessage(message: "%231_HOUR cron job executed");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
@@ -291,7 +291,7 @@ void main(List<String> arguments) async {
   // Schedule to run every 4 hours (e.g., 00:00, 04:00, 08:00, etc.)
   cron.schedule(Schedule.parse('0 */4 * * *'), () async {
     print('************* 4 hour *************');
-    bot.sendMessage(message: "#4_HOUR cron job executed");
+    bot.sendMessage(message: "%234_HOUR cron job executed");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
@@ -311,7 +311,7 @@ void main(List<String> arguments) async {
   // Schedule to run once a day at midnight (00:00)
   cron.schedule(Schedule.parse('0 3 * * *'), () async {
     print('************* Daily *************');
-    bot.sendMessage(message: "#DAILY cron job executed");
+    bot.sendMessage(message: "%23DAILY cron job executed");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
