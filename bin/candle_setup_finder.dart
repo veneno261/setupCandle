@@ -58,26 +58,26 @@ void main(List<String> arguments) async {
   List<String> tokens = [
     'BTC',
     'SOL',
-    'ACT',
-    'MOVR',
+    'AEVO',
+    'INJ',
     'ZRO',
     'XRP',
     'ETH',
     'OM',
-    'VTHO',
+    'IMX',
     'ENA',
-    'AXL',
-    'LDO',
-    'AEVO',
-    'XVS',
-    'FXS',
+    'HOOK',
+    'CFX',
+    'FET',
+    'LPT',
+    'ALT',
     'STX',
     'ORDI',
     'ETHFI',
     'LEVER',
-    'NFP',
+    'NEO',
     'PIXEL',
-    'MEME',
+    'QTUM',
     'SEI',
     'ZK',
     'WOO',
@@ -87,8 +87,8 @@ void main(List<String> arguments) async {
     'JUP',
     'ENJ',
     'ONE',
-    'SAND',
-    'APE',
+    'AI',
+    'APT',
     'ZEN',
     'AXS',
     'VET',
@@ -309,7 +309,7 @@ void main(List<String> arguments) async {
   });
 
   // Schedule to run once a day at midnight (00:00)
-  cron.schedule(Schedule.parse('0 3 * * *'), () async {
+  cron.schedule(Schedule.parse('0 0 * * *'), () async {
     print('************* Daily *************');
     bot.sendMessage(message: "#DAILY cron job executed");
     for (String token in tokens) {
