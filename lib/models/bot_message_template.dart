@@ -22,7 +22,9 @@ Direction: $signal
 
 Candle: $candle
 
-Link : <a href="https://www.tradingview.com/symbols/BINANCE:${tokenName.toUpperCase()}USDT/">${tokenName.toUpperCase()}/USDT chart</a>
+Chart : <a href="https://www.tradingview.com/symbols/BINANCE:${tokenName.toUpperCase()}USDT/">Open Chart</a>
+
+<code>${tokenName.toUpperCase()}USDT</code> Click to copy
     """;
   }
 }

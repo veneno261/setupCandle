@@ -5,7 +5,7 @@ List<String?> isIndecisionCandle(CandleModel candle) {
   double body = (candle.close - candle.open).abs().toDouble();
   double topShadow = candle.high - (candle.close > candle.open ? candle.close : candle.open).toDouble();
   double bottomShadow = ((candle.close > candle.open ? candle.open : candle.close) - candle.low).toDouble();
-  String bodyColor = (candle.close - candle.open).isNegative ? 'red' : 'green';
+  String bodyColor = (candle.close - candle.open).isNegative ? 'Red' : 'Green';
 
   // Check for bullish indecision candle (long bottom shadow, small top shadow)
   if ((bottomShadow >= 2 * body) && (topShadow <= 1.5 * body)) {

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:candle_setup_finder/bloc/chart_img/get_chart_image_bloc.dart';
+import 'package:candle_setup_finder/logics/setup_candle_conditions.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -44,13 +45,11 @@ void main(List<String> arguments) async {
   final cron = Cron();
   final bot = TelegramBot();
 
-  bot.sendMessage(message: "bot start successfully");
+  //bot.sendMessage(message: "bot start successfully");
 
   // TODO: calculate sma degree and count it isaaa
   // TODO: get chart screenshot
 
-  /// list of calculate sma`s
-  List<List<double>> smas = [];
   double sma7 = 0;
   double sma25 = 0;
   double sma99 = 0;
@@ -148,12 +147,13 @@ void main(List<String> arguments) async {
   /// this section check sma bloc and when calculate sma completed check for setup candle and other things
   StreamSubscription smaSubscription = calculateSmasBloc.stream.listen((smaState) {
     if (smaState is CalculateSmasIsCompeleted) {
-      smas = smaState.smas;
-      sma7 = smas[0][smas[0].length - lookBack];
-      sma25 = smas[1][smas[1].length - lookBack];
-      sma99 = smas[2][smas[2].length - lookBack];
+      SetupCandleConditions conditions = SetupCandleConditions(
+        response: response,
+        smas: smaState.smas,
+        lookBack: lookBack,
+      );
 
-      if (response.candleDirection == 'Bullish' && response.high > sma7 && sma7 > sma25 && response.high > sma99) {
+      if (conditions.allBullishConditionsMet()) {
         print('\\**** find LONG setup candle above sma 25 ****//');
         print('A setup candle found: ${response.open}, ${response.high}, ${response.low}, ${response.close}');
         print('sma 7 - 25 - 99: $sma7 - $sma25 - $sma99');
@@ -179,7 +179,7 @@ void main(List<String> arguments) async {
           interval: '${response.dhm == 'histoday' ? '1D' : response.dhm == 'histominute' ? '15m' : '${response.timeFrame}h'}',
           botMessage: botMessageTemplate,
         ));
-      } else if (response.candleDirection == 'Bearish' && response.low < sma7 && sma7 < sma25 && response.low < sma99) {
+      } else if (conditions.allBearishConditionsMet()) {
         print('\\**** find SHORT setup candle under sma 25 ****//');
         print('A setup candle found: ${response.open}, ${response.high}, ${response.low}, ${response.close}');
         print('sma 7 - 25 - 99: $sma7 - $sma25 - $sma99');
@@ -218,7 +218,7 @@ void main(List<String> arguments) async {
     if (chartImgState is ChartImageStateIsCompeleted) {
       bot.sendMessage(
         message: chartImgState.botMessage.toString(),
-        chartImg: chartImgState.chartImg,
+        //chartImg: chartImgState.chartImg,
       );
     } else if (chartImgState is ChartImageStateGotError) {
       bot.sendMessage(
@@ -228,7 +228,7 @@ void main(List<String> arguments) async {
   });
 
   // tokens = [
-  //   'STX',
+  //   'PENDLE',
   //   // 'UNI',
   //   // '1INCH',
   //   // 'LDO',
@@ -240,7 +240,7 @@ void main(List<String> arguments) async {
   //     tokenName: token,
   //     tokenConvert: tokenConvert,
   //     candleLimit: candleLimit,
-  //     timeFrame: '1',
+  //     timeFrame: '4',
   //     dhm: dhm,
   //   );
   //   findSetupCandleBloc.add(event);
