@@ -45,7 +45,7 @@ void main(List<String> arguments) async {
   final cron = Cron();
   final bot = TelegramBot();
 
-  //bot.sendMessage(message: "bot start successfully");
+  bot.sendMessage(message: "bot start successfully");
 
   // TODO: calculate sma degree and count it isaaa
   // TODO: get chart screenshot
