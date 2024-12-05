@@ -218,7 +218,7 @@ void main(List<String> arguments) async {
     if (chartImgState is ChartImageStateIsCompeleted) {
       bot.sendMessage(
         message: chartImgState.botMessage.toString(),
-        //chartImg: chartImgState.chartImg,
+        chartImg: chartImgState.chartImg,
       );
     } else if (chartImgState is ChartImageStateGotError) {
       bot.sendMessage(
