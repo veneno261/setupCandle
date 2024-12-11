@@ -43,12 +43,11 @@ void main(List<String> arguments) async {
   //'8159444945:AAFREaeS7veuvpiG_oFDEogcQASvBJSpU78', '60596350'
 
   final cron = Cron();
-  final bot = TelegramBot();
+  final bot = TelegramBotMessenger();
 
-  bot.sendMessage(message: "bot start successfully");
+  bot.sendTextMessage(message: "bot start successfully");
 
   // TODO: calculate sma degree and count it isaaa
-  // TODO: get chart screenshot
 
   double sma7 = 0;
   double sma25 = 0;
@@ -216,19 +215,21 @@ void main(List<String> arguments) async {
   // get chart image if there is setup candle and if i can get chart image send it to bot and if i cant then send a simple message to bot
   StreamSubscription chartImgSubscription = chartImageBloc.stream.listen((chartImgState) {
     if (chartImgState is ChartImageStateIsCompeleted) {
-      bot.sendMessage(
-        message: chartImgState.botMessage.toString(),
-        chartImg: chartImgState.chartImg,
+      bot.sendImageWithCaption(
+        caption: chartImgState.botMessage.toString(),
+        image: chartImgState.chartImg,
+        chatId: '@setupcandle',
       );
     } else if (chartImgState is ChartImageStateGotError) {
-      bot.sendMessage(
+      bot.sendTextMessage(
         message: chartImgState.botMessage.toString(),
+        chatId: '@setupcandle',
       );
     }
   });
 
   // tokens = [
-  //   'PENDLE',
+  //   'ALT',
   //   // 'UNI',
   //   // '1INCH',
   //   // 'LDO',
@@ -240,7 +241,7 @@ void main(List<String> arguments) async {
   //     tokenName: token,
   //     tokenConvert: tokenConvert,
   //     candleLimit: candleLimit,
-  //     timeFrame: '4',
+  //     timeFrame: '1',
   //     dhm: dhm,
   //   );
   //   findSetupCandleBloc.add(event);
@@ -271,7 +272,7 @@ void main(List<String> arguments) async {
   //Schedule to run every hour at exact intervals (e.g., 01:00, 02:00, etc.)
   cron.schedule(Schedule.parse('0 * * * *'), () async {
     print('************* 1 hour *************');
-    bot.sendMessage(message: "#1_HOUR cron job executed");
+    bot.sendTextMessage(message: "#1_HOUR cron job executed");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
@@ -291,7 +292,7 @@ void main(List<String> arguments) async {
   // Schedule to run every 4 hours (e.g., 00:00, 04:00, 08:00, etc.)
   cron.schedule(Schedule.parse('0 */4 * * *'), () async {
     print('************* 4 hour *************');
-    bot.sendMessage(message: "#4_HOUR cron job executed");
+    bot.sendTextMessage(message: "#4_HOUR cron job executed");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
@@ -311,7 +312,7 @@ void main(List<String> arguments) async {
   // Schedule to run once a day at midnight (00:00)
   cron.schedule(Schedule.parse('0 0 * * *'), () async {
     print('************* Daily *************');
-    bot.sendMessage(message: "#DAILY cron job executed");
+    bot.sendTextMessage(message: "#DAILY cron job executed");
     for (String token in tokens) {
       event = FindSetupCandleEvent(
         lookBack: lookBack,
